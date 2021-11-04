@@ -20,6 +20,11 @@ Usage of gSigFlip.exe:
         the xor key you want to use
 ```
 
+## As a Package
+
+Please view [cmd/gSigFlip/main.go](cmd/gSigFlip/main.go)
+
 ## Reference
+
 - [github.com/med0x2e/SigFlip](https://github.com/med0x2e/SigFlip)
 - [Gamaredon向带有有效签名的PE中嵌入脚本](https://mp.weixin.qq.com/s/bJrEwoq4QkDJvEk_ThvueQ)
