@@ -1,4 +1,5 @@
 name: Release with goreleaser
+
 on:
   push:
     tags:

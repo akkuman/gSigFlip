@@ -10,6 +10,7 @@ builds:
         goarch: 386
       - goos: windows
         goarch: arm64
+    main: ./cmd/gSigFlip
 archives:
   - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}'
     replacements:
