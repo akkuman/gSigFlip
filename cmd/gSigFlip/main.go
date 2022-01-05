@@ -3,12 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/akkuman/gSigFlip"
-	"math/big"
 	"math/rand"
 	"os"
+	"strconv"
 	"strings"
 	"time"
+
+	"github.com/akkuman/gSigFlip"
 )
 
 var (
@@ -36,9 +37,11 @@ func parseTagToBytes(tagStr string) []byte {
 	tagSplit := strings.Split(tagStr, " ")
 	data := make([]byte, len(tagSplit))
 	for i := range tagSplit {
-		bigint := new(big.Int)
-		bigint.SetString(tagSplit[i], 16)
-		data[i] = bigint.Bytes()[0]
+		cByte, err := strconv.ParseUint(tagSplit[i], 16, 8)
+		if err != nil {
+			panic(err)
+		}
+		data[i] = byte(cByte)
 	}
 	return data
 }
